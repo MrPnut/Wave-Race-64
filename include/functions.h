@@ -101,7 +101,7 @@ Gfx* func_i4_802C5CDC(Gfx*);
 Gfx* func_800949B8(Gfx*, int courseId);
 void func_801E355C(void);
 Gfx* func_801E3698(Gfx*);
-Gfx* func_801E34F8(Gfx* arg0);
+Gfx* func_801E34F8(Gfx* gdl);
 void func_8007B31C(void);
 void func_801E5470(void);
 void func_801E6074(void*);

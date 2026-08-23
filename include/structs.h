@@ -1045,4 +1045,18 @@ typedef struct UnkStruct_801C43F8_s {
     char pad35E8[0x44];
 } UnkStruct_801C43F8;
 
+typedef struct UnkStruct_801CE5F8_s {
+    char pad[0xA40];
+    Mtx unkA40[1];
+    Mtx unkA80[1];
+    char padA80[0x7C0-0x40];
+    char pad2[0x40];
+    Vp unk1280[3];
+    char pad12B0[0x50];
+    Mtx unk1300[1];
+    Mtx unk1340[1];
+    char pad1380[0x400];
+    Mtx unk1780[1];
+} UnkStruct_801CE5F8;
+
 #endif /* STRUCTS_H */

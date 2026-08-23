@@ -6,7 +6,7 @@ void func_i3_802C5AE8(void) {
 }
 
 void func_i3_802C5AF0(void) {
-    func_80069798(D_801CE5F8 + 0xA80, D_801CE5F8 + 0x1780, D_801CE5F8 + 0xA40, &D_802C7024, &D_80198310, &D_80198350);
+    func_80069798(D_801CE5F8->unkA80, D_801CE5F8->unk1780, D_801CE5F8->unkA40, &D_802C7024, &D_80198310, &D_80198350);
 }
 
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/overlays/ovl_i3/ovl_1BC890/func_i3_802C5B40.s")

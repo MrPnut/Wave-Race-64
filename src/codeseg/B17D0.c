@@ -1,11 +1,15 @@
 #include "common.h"
 
 void func_801EC830(s32*);
+
 extern u32 D_802288F0;
 extern s32 D_802288F4;
 extern s32 D_802288F8;
 extern s32 D_802288FC;
 extern f32 D_80226334;
+extern Vp D_80226340;
+extern u16 D_80228900;
+extern UnkStruct_801CE5F8* D_801CE5F8;
 
 f32 func_801E31A0(void) {
     int temp;
@@ -34,16 +38,55 @@ f32 func_801E31A0(void) {
     return var_f2;
 }
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/codeseg/B17D0/func_801E3250.s")
+void func_801E3250(void) {
+    s32 i;
+    s32 var_s0;
+    MtxF sp170;
+    MtxF sp130;
+    MtxF spF0;
+    Mtx spB0;
+    Mtx sp70;
 
-Gfx* func_801E34F8(Gfx* arg0) {
+    if (D_801CE63C != 0) {
+        D_802288F4 = 0;
+        D_802288F0 = 0;
+        D_802288F8 = 0x140;
+        D_802288FC = -0x108;
+    }
+    func_800481E0(D_801CE5F8->unkA40, &D_80228900, 33.0f, 1.0f, 16.0f, 4096.0f, 0.0f, 0.0f);
+    func_80048A88(&spB0, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.025f);
+    func_800484C8(&sp70, &sp130, 500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    SysUtils_MtxToMtxF(&spB0, &sp170);
+    SysUtils_MatrixAffineMultiply(&sp130, &sp170, &spF0);
+
+    for (i = 0; i < 3; i++) {
+        if (i & 1) {
+            var_s0 = D_802288FC;
+        } else {
+            var_s0 = D_802288F8;
+        }
+        SysUtils_MtxFToMtx(&spF0, &D_801CE5F8->unkA80[i]);
+        D_801CE5F8->unk1280[i] = D_80226340;
+        D_801CE5F8->unk1280[i].vp.vtrans[0] = ((var_s0 + 0x38) << 2);
+        D_801CE5F8->unk1280[i].vp.vtrans[1] = ((i + 7) * 0x12 - 4) << 2;
+    }
+
+    if (D_801C2928 == 0) {
+        SysUtils_MtxFToMtx(&spF0, &D_801CE5F8->unkA80[i]);
+        D_801CE5F8->unk1280[i] = D_80226340;
+        D_801CE5F8->unk1280[i].vp.vtrans[0] = ((D_802288FC + 0x38) << 2);
+        D_801CE5F8->unk1280[i].vp.vtrans[1] = 0x338;
+    }
+}
+
+Gfx* func_801E34F8(Gfx* gdl) {
     if (D_801CE63C != 0) {
         D_801CE63C = 0;
     }
     D_800DAB2C = 0;
-    arg0 = func_801E3698(Draw_WaterEffects(func_800949B8(func_8008FB74(arg0), gCourseID)));
+    gdl = func_801E3698(Draw_WaterEffects(func_800949B8(func_8008FB74(gdl), gCourseID)));
     func_801E355C();
-    return arg0;
+    return gdl;
 }
 
 void func_801E355C(void) {
