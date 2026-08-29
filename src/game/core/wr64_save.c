@@ -231,7 +231,33 @@ void func_8007B1AC(Unkstruct_8007B1AC_arg0* arg0, Unkstruct_8007B1AC_arg1* arg1)
     arg1->unk3 = (u8) (arg1->unk3 ^ (arg0->unkB << 7));
 }
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007B220.s")
+void func_8007B220(UnkStruct_8007B2BC* arg0, UnkStruct_8007B2BC* arg1) {
+    s32 temp_t0 = (u8) arg0->unk0;
+    s32 temp_a2 = (u8) arg0->unk1;
+    s32 temp_a3 = (u8) arg0->unk2;
+    s32 var_v1;
+
+    u8* dest_u8 = (u8*) arg1;
+    s32* dest_s32 = (s32*) arg1;
+    u8* src_u8 = (u8*) arg0;
+
+    var_v1 = ((temp_t0 & 0x1F) << 16) + (temp_a2 << 8) + temp_a3;
+
+    if (var_v1 < 0) {
+        var_v1 = 0;
+    }
+    if (var_v1 >= 100000) {
+        var_v1 = 99999;
+    }
+
+    dest_s32[0] = var_v1;
+    dest_s32[1] = ((u32) temp_t0 >> 5) & 7;
+
+    func_8007AEFC((UnkStruct_8007AEFC*) (dest_u8 + 0xC), (UnkStruct_8007AEFC*) (src_u8 + 3));
+
+    dest_u8[0xF] = 0;
+    dest_s32[2] = (src_u8[3] >> 7) & 1;
+}
 
 void func_8007B2BC(s32 arg0, UnkStruct_8007B2BC* arg1) {
     if (arg0 < 0) {
