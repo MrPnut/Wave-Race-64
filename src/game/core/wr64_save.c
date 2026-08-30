@@ -67,6 +67,9 @@ extern s32 D_800D826A;
 extern u8 D_800D82D8;
 extern u8 D_800D82E8;
 extern OSPfs D_801C3AD0;
+extern u8 D_801C23B0[];
+extern u8 D_800D8290[];
+extern u8 D_801AEBF0[];
 
 #define SAVE_SUCCESS 0
 
@@ -413,7 +416,38 @@ s32 func_8007BE64(void) {
 
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007C0B8.s")
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007C204.s")
+s32 func_8007C204(s32 arg0) {
+    s32 sp24[3];
+    s32 temp_v0;
+
+    if (D_800D8260 == 0) {
+        return 1;
+    }
+
+    if ((arg0 <= 0) || (arg0 >= 9)) {
+        return 0;
+    }
+
+    sp24[0] = arg0 - 1;
+
+    func_8007B09C(&D_801C23B0[arg0 * 0x14], ((u8*) D_801AEA18 + (arg0 * 5) + 0x1D3));
+    func_8007B31C();
+
+    D_801AEA18[0].unk2 = Save_GenCheckSum(D_801AEA18);
+
+    if (osEepromLongWrite(&D_801540D0, 0, (u8*) D_801AEA18, 0x10) != 0) {
+        return 3;
+    }
+
+    temp_v0 = *(s32*) (&D_800D8290[sp24[0] * 4]);
+
+    if (osEepromLongWrite(&D_801540D0, ((u32) (((u8*) D_801AEBF0 - (u8*) D_801AEA18) + temp_v0) >> 3),
+                          (u8*) &D_801AEA18[0] + temp_v0 + 0x1D8, 0x10) != 0) {
+        return 3;
+    }
+
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007C31C.s")
 
