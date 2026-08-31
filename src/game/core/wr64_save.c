@@ -50,6 +50,14 @@ typedef struct UnkStruct_8007D110_s {
     u8 pad33[10];
 } UnkStruct_8007D110;
 
+typedef struct UnkStruct_8007B110_s {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    u8 pad[7];
+    u8 unk13;
+} UnkStruct_8007B110;
+
 extern UnkStruct_801AEA18 D_801AEA18[];
 extern UnkStruct_801AEA18 D_801AEB38;
 
@@ -214,7 +222,33 @@ void func_8007B09C(UnkStruct_func_8007AF78_1* arg0, UnkStruct_func_8007AF78_2* a
     arg1->unk3 ^= (arg0->unkB << 7);
 }
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007B110.s")
+void func_8007B110(Unkstruct_8007B1AC_arg1* arg0, UnkStruct_8007B110* arg1) {
+    u8 temp_t0 = arg0->unk0;
+    u8 temp_a2 = arg0->unk1;
+    u8 temp_a3 = arg0->unk2;
+    s32 var_v1;
+    u32 temp_t1;
+
+    var_v1 = ((temp_t0 & 0x1F) << 16) + (temp_a2 << 8) + temp_a3;
+
+    if (var_v1 < 0) {
+        var_v1 = 0;
+    }
+
+    temp_t1 = (u32) temp_t0 >> 5;
+
+    if (var_v1 >= 0x927C0) {
+        var_v1 = 0x927BF;
+    }
+
+    arg1->unk0 = var_v1;
+    arg1->unk4 = temp_t1 & 7;
+
+    func_8007AEFC((UnkStruct_8007AEFC*) ((u8*) arg1 + 0x10), (UnkStruct_8007AEFC*) &arg0->unk3);
+
+    arg1->unk13 = 0;
+    arg1->unk8 = (arg0->unk3 >> 7) & 1;
+}
 
 void func_8007B1AC(Unkstruct_8007B1AC_arg0* arg0, Unkstruct_8007B1AC_arg1* arg1) {
     s32 new_var2;
@@ -414,7 +448,34 @@ s32 func_8007BE64(void) {
 
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007BEA4.s")
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007C0B8.s")
+s32 func_8007C0B8(s32 arg0) {
+    s32 temp_v0;
+    s32 var_v0;
+
+    if (D_800D8260 == 0) {
+        return 1;
+    }
+    if (arg0 >= 9) {
+        return 0;
+    }
+
+    for (var_v0 = 0; var_v0 < 3; var_v0++) {
+        func_8007B1AC((Unkstruct_8007B1AC_arg0*) &D_801C26E8[arg0][var_v0],
+                      (Unkstruct_8007B1AC_arg1*) D_801AEA18->unk120[arg0][var_v0]);
+    }
+
+    func_8007B31C();
+    D_801AEA18->unk2 = Save_GenCheckSum((u8*) D_801AEA18);
+    if (osEepromLongWrite(&D_801540D0, 0U, (u8*) D_801AEA18, 0x10) != 0) {
+        return 3;
+    }
+    temp_v0 = D_800D826C[arg0];
+    if (osEepromLongWrite(&D_801540D0, ((((uintptr_t) &D_801AEB38 - (uintptr_t) &D_801AEA18) + temp_v0)) >> 3,
+                          (u8*) D_801AEA18->unk120 + temp_v0, 0x18) != 0) {
+        return 3;
+    }
+    return 0;
+}
 
 s32 func_8007C204(s32 arg0) {
     s32 sp24[3];
