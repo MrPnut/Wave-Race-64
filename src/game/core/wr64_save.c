@@ -54,9 +54,30 @@ typedef struct UnkStruct_8007B110_s {
     s32 unk0;
     s32 unk4;
     s32 unk8;
-    u8 pad[7];
+    u8 unkC[4];
+    s8 unk10[2];
+    u8 unk12;
     u8 unk13;
 } UnkStruct_8007B110;
+
+typedef struct UnkStruct_8007CB68_1_s {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    u8 unkC;
+    u8 unkD;
+    u8 unkE;
+    s8 unkF;
+} UnkStruct_8007CB68_1;
+
+typedef struct UnkStruct_8007CB68_2_s {
+    u8 unk0[0x60];
+    u8 unk60[8][4][6];
+    u8 unk120[9][3][5];
+    u8 unk1A7;
+    u8 unk1A8[8][2][3];
+    u8 unk1C0[8][5];
+} UnkStruct_8007CB68_2;
 
 extern UnkStruct_801AEA18 D_801AEA18[];
 extern UnkStruct_801AEA18 D_801AEB38;
@@ -78,6 +99,10 @@ extern OSPfs D_801C3AD0;
 extern u8 D_801C23B0[];
 extern u8 D_800D8290[];
 extern u8 D_801AEBF0[];
+extern UnkStruct_801AEA18 D_801AEA18[];
+extern u8 D_801AEC18;
+extern UnkStruct_8007B110 D_801AEA8A[];
+extern UnkStruct_8007B110 D_801AEC8A[];
 
 #define SAVE_SUCCESS 0
 
@@ -572,7 +597,119 @@ s32 func_8007C9D4(s32 arg0) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007CB68.s")
+void func_8007CB68(void) {
+    s32 i;
+    s32 j;
+    UnkStruct_8007CB68_1* new_var;
+    u32 k;
+    s32 changed;
+    UnkStruct_8007B110* new_var2;
+    UnkStruct_8007CB68_2* eep;
+    UnkStruct_8007B110 rec_a[3];
+    UnkStruct_8007B110 rec_b[3];
+    UnkStruct_8007B110 rec_tmp;
+    UnkStruct_8007CB68_1 buf_a[3];
+    UnkStruct_8007CB68_1 buf_b[3];
+    UnkStruct_8007CB68_1 buf_tmp;
+
+    eep = (UnkStruct_8007CB68_2*) D_801AEA18;
+    new_var = buf_b;
+
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 3; j++) {
+            func_8007AFF4(((UnkStruct_8007CB68_2*) D_801AEA18)->unk60[i][j], &rec_a[j]);
+            func_8007AFF4(((UnkStruct_8007CB68_2*) (&D_801AEC18))->unk60[i][j], &rec_b[j]);
+        }
+
+        changed = 0;
+        for (j = 0; j < 3; j++) {
+            for (k = 0; k < 3; k++) {
+                if ((((rec_a[j].unk0 == rec_b[k].unk0) && (rec_a[j].unk4 == rec_b[k].unk4)) &&
+                     (rec_a[j].unk8 == rec_b[k].unk8)) &&
+                    (Libc_strncmp(rec_a[j].unk10, rec_b[k].unk10, 3) == 0)) {
+                    rec_b[k].unk0 = 0x927BF;
+                }
+            }
+        }
+
+        for (j = 0; j < 3; j++) {
+            for (k = 0; k < 3; k++) {
+                if (rec_b[k].unk0 < rec_a[j].unk0) {
+                    rec_tmp = rec_a[j];
+                    rec_a[j] = rec_b[k];
+                    rec_b[k] = rec_tmp;
+                    if (j == 0) {
+                        changed = 1;
+                    }
+                }
+            }
+        }
+
+        for (j = 0; j < 3; j++) {
+            func_8007AF78(&rec_a[j], ((UnkStruct_8007CB68_2*) D_801AEA18)->unk60[i][j]);
+        }
+
+        if (changed) {
+            for (j = 0; j < 2; j++) {
+                for (k = 0; k < 3; k++) {
+                    ((UnkStruct_8007CB68_2*) D_801AEA18)->unk1A8[i][j][k] =
+                        ((UnkStruct_8007CB68_2*) (&D_801AEC18))->unk1A8[i][j][k];
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < 8; i++) {
+        func_8007AFF4(((UnkStruct_8007CB68_2*) D_801AEA18)->unk60[i][3], &rec_a[0]);
+        func_8007AFF4(((UnkStruct_8007CB68_2*) (&D_801AEC18))->unk60[i][3], &rec_b[0]);
+        if (rec_b[0].unk0 < rec_a[0].unk0) {
+            new_var2 = rec_b;
+            rec_a[0] = new_var2[0];
+        }
+        func_8007AF78(&rec_a[0], ((UnkStruct_8007CB68_2*) D_801AEA18)->unk60[i][3]);
+    }
+
+    for (i = 0; i < 8; i++) {
+        func_8007B110(((UnkStruct_8007CB68_2*) D_801AEA18)->unk1C0[i], &rec_a[0]);
+        func_8007B110(((UnkStruct_8007CB68_2*) (&D_801AEC18))->unk1C0[i], &rec_b[0]);
+        if (rec_b[0].unk0 < rec_a[0].unk0) {
+            new_var2 = rec_b;
+            rec_a[0] = new_var2[0];
+        }
+        func_8007B09C(&rec_a[0], ((UnkStruct_8007CB68_2*) D_801AEA18)->unk1C0[i]);
+    }
+
+    for (i = 0; i < 9; i++) {
+        for (j = 0; j < 3; j++) {
+            func_8007B220(((UnkStruct_8007CB68_2*) D_801AEA18)->unk120[i][j], &buf_a[j]);
+            func_8007B220(((UnkStruct_8007CB68_2*) (&D_801AEC18))->unk120[i][j], &buf_b[j]);
+        }
+
+        for (j = 0; j < 3; j++) {
+            for (k = 0; k < 3; k++) {
+                if ((((buf_a[j].unk0 == new_var[k].unk0) && (buf_a[j].unk4 == new_var[k].unk4)) &&
+                     (buf_a[j].unk8 == buf_b[k].unk8)) &&
+                    (Libc_strncmp(&buf_a[j].unkC, &buf_b[k].unkC, 3) == 0)) {
+                    buf_b[k].unk0 = 0;
+                }
+            }
+        }
+
+        for (j = 0; j < 3; j++) {
+            for (k = 0; k < 3; k++) {
+                if (buf_a[j].unk0 < new_var[k].unk0) {
+                    buf_tmp = buf_a[j];
+                    buf_a[j] = new_var[k];
+                    buf_b[k] = buf_tmp;
+                }
+            }
+        }
+
+        for (j = 0; j < 3; j++) {
+            func_8007B1AC(&buf_a[j], ((UnkStruct_8007CB68_2*) D_801AEA18)->unk120[i][j]);
+        }
+    }
+}
 
 s32 Save_PfsIsPlug(void) {
     UnkStruct_8007D110 wtf;
