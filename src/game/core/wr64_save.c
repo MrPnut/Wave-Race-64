@@ -34,16 +34,6 @@ typedef struct UnkStruct_800D8578_s {
     s32 unkC;
 } UnkStruct_800D8578;
 
-typedef struct UnkStruct_801AEA18_s {
-    s16 unk0;
-    u16 unk2;
-    u8 pad[0x4C];
-    u8 unk50[1][3];
-    char pad54[0xCD];
-    char unk120[1][3][5];
-    char pad124[0xDD];
-} UnkStruct_801AEA18;
-
 typedef struct UnkStruct_8007D110_s {
     u8 pad[0x16];
     u8 bitpattern;
@@ -70,21 +60,8 @@ typedef struct UnkStruct_8007CB68_1_s {
     s8 unkF;
 } UnkStruct_8007CB68_1;
 
-typedef struct UnkStruct_8007CB68_2_s {
-    u8 unk0[0x10];
-    u8 unk10[4][10];
-    u8 unk38[2][4][3];
-    u8 unk50[3][3];
-    u8 unk59[7];
-    u8 unk60[8][4][6];
-    u8 unk120[9][3][5];
-    u8 unk1A7;
-    u8 unk1A8[8][2][3];
-    u8 unk1D8[8][5];
-} UnkStruct_8007CB68_2;
-
-extern UnkStruct_801AEA18 D_801AEA18[];
-extern UnkStruct_801AEA18 D_801AEB38;
+extern UnkStruct_8007CB68_2 D_801AEA18[];
+extern UnkStruct_8007CB68_2 D_801AEB38;
 
 extern s32 D_800D8264;
 extern OSPfs D_801C3AD0;
@@ -103,14 +80,18 @@ extern OSPfs D_801C3AD0;
 extern u8 D_801C23B0[];
 extern u8 D_800D8290[];
 extern u8 D_801AEBF0[];
-extern UnkStruct_801AEA18 D_801AEA18[];
 extern u8 D_801AEC18;
 extern UnkStruct_8007B110 D_801AEA8A[];
 extern UnkStruct_8007B110 D_801AEC8A[];
+extern UnkStruct_8007B110 D_801C202C[8][3];
+extern UnkStruct_8007B110 D_801C22D4[8];
+extern UnkStruct_8007B110 D_801C23C4[8];
 extern UnkStruct_func_8007AF78_1 D_800D82F8[8][4];
 extern s32 D_800DA940[4];
 extern s32 D_800DA988[][3];
 extern u8 D_800D8728[];
+extern u8 D_801AEA28[];
+extern u8 D_801C24C4[];
 
 #define SAVE_SUCCESS 0
 
@@ -416,7 +397,7 @@ void func_8007B370(UnkStruct_8007CB68_2* arg) {
         }
     }
 
-    arg->unk0[0xC] = 0;
+    arg->unkC = 0;
     for (src_u32 = D_800DA940, dst_u32 = arg; src_u32 < ((u32*) (0x10 + ((u8*) D_800DA940))); src_u32++) {
         ((u8*) dst_u32)[8] = *src_u32;
         dst_u32 = ((u8*) dst_u32) + 1;
@@ -430,7 +411,6 @@ void func_8007B370(UnkStruct_8007CB68_2* arg) {
 }
 
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007B630.s")
-
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007B930.s")
 
 void func_8007BBE8() {
@@ -464,7 +444,7 @@ s32 Save_EepromRead(void) {
     }
 
     for (i = 0, var_a1 = 0; i < 2; i++) {
-        if (D_801AEA18->pad[i - 4] != D_800D8268[i]) {
+        if (D_801AEA18->unk4[i - 4] != D_800D8268[i]) {
             var_a1 = 1;
             break;
         }
@@ -602,7 +582,42 @@ s32 func_8007C204(s32 arg0) {
     return 0;
 }
 
-#pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007C31C.s")
+s32 func_8007C31C(void) {
+    u8* var_s1;
+    s32 var_s2;
+    u32 k;
+    s32 var_v0;
+
+    if (D_800D8260 == 0) {
+        return 1;
+    }
+
+    var_s1 = &D_801CB308[0];
+
+    for (var_s2 = 0; var_s2 < 4; var_s2++) {
+        Libc_strncpy(&D_801AEA28[var_s2 * 10], (&D_801CB298[var_s2]), 10);
+        for (k = 0; k < 2; k++) {
+            for (var_v0 = 0; var_v0 < 3; var_v0++) {
+                D_801AEA18->unk38[k][var_s2][var_v0] = D_801CB298[(k * 4) + var_s2].unk_B[var_v0];
+            }
+        }
+    }
+
+    func_8007B31C();
+
+    D_801AEA18->unk2 = Save_GenCheckSum(D_801AEA18);
+
+    if (osEepromLongWrite(&D_801540D0, 0, D_801AEA18, 0x10) != 0) {
+        k = 0;
+        return 3;
+    }
+
+    if (osEepromLongWrite(&D_801540D0, ((u32) (D_801AEA28 - ((u8*) D_801AEA18))) >> 3, D_801AEA28, 0x40) != 0) {
+        return 3;
+    }
+
+    return 0;
+}
 
 #pragma GLOBAL_ASM("asm/us/rev1/nonmatchings/game/core/wr64_save/func_8007C494.s")
 
