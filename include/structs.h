@@ -720,6 +720,23 @@ typedef struct SEGA2 {
     s8 unk13;
 } func_8007AFF4_arg1;
 
+typedef struct UnkStruct_8007CB68_2_s {
+    u16 unk0;
+    u16 unk2;
+    u8 unk4[8];
+    u8 unkC;
+    u8 unkD[3];
+    u8 unk10[4][10];
+    u8 unk38[2][4][3];
+    u8 unk50[3][3];
+    u8 unk59[7];
+    u8 unk60[8][4][6];
+    u8 unk120[9][3][5];
+    u8 unk1A7;
+    u8 unk1A8[8][2][3];
+    u8 unk1D8[8][5];
+} UnkStruct_8007CB68_2;
+
 union float_halfword {
     f32 f;
     u16 h;
